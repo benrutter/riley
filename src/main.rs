@@ -1,11 +1,11 @@
 use nannou::prelude::*;
 
-
 const ROWS: u32 = 25;
 const COLS: u32 = 50;
 const SIZE: u32 = 30;
 const WIDTH: u32 = COLS * SIZE;
 const HEIGHT: u32 = ROWS * SIZE;
+const SLANT: f32 = 0.5;
 
 fn main() {
     nannou::sketch(view).size(WIDTH, HEIGHT).loop_mode(LoopMode::loop_once()).run();
@@ -16,18 +16,23 @@ fn view(app: &App, frame: Frame) {
     let gdraw = draw.scale(SIZE as f32).scale_y(-1.0).x_y(COLS as f32 / -2.0 + 0.5, ROWS as f32 / -2.0 + 0.5);
     draw.background().color(SNOW);
     let mut counter = 0;
-    let mut shade = PINK;
+    let mut shade;
     for y in 0..ROWS {
         for x in 0..COLS {
             if counter % 2 == 0 {
                 shade = PINK;
             } else {
-                shade = RED;
+                shade = BLUE;
             }
             let cdraw = gdraw.x_y(x as f32, y as f32);
-            cdraw.rect()
+            cdraw.polygon()
                 .color(shade)
-                .w_h(1.0, 1.0);
+                .points([
+                    pt2(0.0, 0.0 + SLANT),
+                    pt2(1.0, 0.0 - SLANT),
+                    pt2(1.0, 1.0 - SLANT),
+                    pt2(0.0, 1.0 + SLANT),
+                ]);
             counter += 1;
         }
         counter += 1;
